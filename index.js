@@ -10,6 +10,10 @@ function preload() {
     name: "Sumo",
     file: loadImage("assets/sumo.png"),
   });
+  images.push({
+    name: "Elephant",
+    file: loadImage("assets/elephant.png"),
+  });
 }
 
 function setup() {
@@ -24,7 +28,10 @@ function setup() {
     img.file.loadPixels();
 
     for (let i = 0; i < img.file.pixels.length; i += 4) {
-      const pixel = img.file.pixels.slice(i, i + 4).join(",");
+      const pixel = img.file.pixels
+        .slice(i, i + 4)
+        .map((v) => v - (v % 10)) // Round to nearest 10
+        .join(",");
       if (!img.colors.includes(pixel)) {
         const colorPicker = createColorPicker(pixel.split(","));
         colorPicker.elt.name = `cp_${page}_${img.colors.length}`;
@@ -36,6 +43,7 @@ function setup() {
       }
       img.bitmap.push(img.colors.indexOf(pixel));
     }
+    console.log(img.colors);
   });
 
   handleKeyPressed(LEFT_ARROW);
